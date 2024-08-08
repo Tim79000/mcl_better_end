@@ -1,3 +1,4 @@
+local YMAX = -269720
 
 minetest.register_node("mcl_better_end:enderite_ore", {
     description = "Ore of Enderite",
@@ -15,14 +16,16 @@ minetest.register_node("mcl_better_end:enderite_ore", {
 })
 
 
---need new mapgen code
-minetest.register_ore({
-	ore_type = "scatter",
-	ore = "mcl_better_end:enderite_ore",
-	wherein = "air",
-	clust_scarcity = 327680,
-	clust_num_ores = 1,
-	clust_size = 1,
-	y_max = -27020,
-	y_min = -27060,
-})
+mcl_better_end.mapgen.registered_nodes.enderite_ore = minetest.get_content_id("mcl_better_end:enderite_ore")
+
+mcl_better_end.mapgen.ores.enderite = function(data, vi, area, pr, x, y, z)
+    if y > YMAX then
+        return
+    end
+    --enderite
+    if pr:next(1, 1000) == 5 then
+        if pr:next(1, 10) == 5 then
+            data[vi] = mcl_better_end.mapgen.registered_nodes.enderite_ore
+        end
+    end
+end
